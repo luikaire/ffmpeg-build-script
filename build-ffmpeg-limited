@@ -453,7 +453,7 @@ else
     #~ fi
     # CONFIGURE_OPTIONS+=("--enable-gmp" "--enable-gnutls")
     echo '';
-  fi
+#  fi
 fi
 
 if build "cmake" "3.27.7"; then
