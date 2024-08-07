@@ -522,18 +522,18 @@ if command_exists "python3"; then
   fi
 fi
 
-if build "svtav1" "2.1.0"; then
-  # Last known working commit which passed CI Tests from HEAD branch
-  download "https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$CURRENT_PACKAGE_VERSION/SVT-AV1-v$CURRENT_PACKAGE_VERSION.tar.gz" "svtav1-$CURRENT_PACKAGE_VERSION.tar.gz"
-  cd "${PACKAGES}"/svtav1-$CURRENT_PACKAGE_VERSION//Build/linux || exit
-  execute cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=off -DBUILD_SHARED_LIBS=OFF ../.. -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-  execute make -j $MJOBS
-  execute make install
-  execute cp SvtAv1Enc.pc "${WORKSPACE}/lib/pkgconfig/"
-  execute cp SvtAv1Dec.pc "${WORKSPACE}/lib/pkgconfig/"
-  build_done "svtav1" $CURRENT_PACKAGE_VERSION
-fi
-CONFIGURE_OPTIONS+=("--enable-libsvtav1")
+#~ if build "svtav1" "2.1.0"; then
+  #~ # Last known working commit which passed CI Tests from HEAD branch
+  #~ download "https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$CURRENT_PACKAGE_VERSION/SVT-AV1-v$CURRENT_PACKAGE_VERSION.tar.gz" "svtav1-$CURRENT_PACKAGE_VERSION.tar.gz"
+  #~ cd "${PACKAGES}"/svtav1-$CURRENT_PACKAGE_VERSION//Build/linux || exit
+  #~ execute cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=off -DBUILD_SHARED_LIBS=OFF ../.. -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+  #~ execute make -j $MJOBS
+  #~ execute make install
+  #~ execute cp SvtAv1Enc.pc "${WORKSPACE}/lib/pkgconfig/"
+  #~ execute cp SvtAv1Dec.pc "${WORKSPACE}/lib/pkgconfig/"
+  #~ build_done "svtav1" $CURRENT_PACKAGE_VERSION
+#~ fi
+#~ CONFIGURE_OPTIONS+=("--enable-libsvtav1")
 
 
 #~ if command_exists "cargo"; then
@@ -551,68 +551,68 @@ CONFIGURE_OPTIONS+=("--enable-libsvtav1")
 
 if $NONFREE_AND_GPL; then
 
-  if build "x264" "be4f0200"; then
-    download "https://code.videolan.org/videolan/x264/-/archive/$CURRENT_PACKAGE_VERSION/x264-$CURRENT_PACKAGE_VERSION.tar.gz" "x264-$CURRENT_PACKAGE_VERSION.tar.gz"
-    cd "${PACKAGES}"/x264-$CURRENT_PACKAGE_VERSION || exit
+  #~ if build "x264" "be4f0200"; then
+    #~ download "https://code.videolan.org/videolan/x264/-/archive/$CURRENT_PACKAGE_VERSION/x264-$CURRENT_PACKAGE_VERSION.tar.gz" "x264-$CURRENT_PACKAGE_VERSION.tar.gz"
+    #~ cd "${PACKAGES}"/x264-$CURRENT_PACKAGE_VERSION || exit
 
-    if [[ "$OSTYPE" == "linux-gnu" ]]; then
-      execute ./configure --prefix="${WORKSPACE}" --enable-static --enable-pic CXXFLAGS="-fPIC ${CXXFLAGS}"
-    else
-      execute ./configure --prefix="${WORKSPACE}" --enable-static --enable-pic
-    fi
+    #~ if [[ "$OSTYPE" == "linux-gnu" ]]; then
+      #~ execute ./configure --prefix="${WORKSPACE}" --enable-static --enable-pic CXXFLAGS="-fPIC ${CXXFLAGS}"
+    #~ else
+      #~ execute ./configure --prefix="${WORKSPACE}" --enable-static --enable-pic
+    #~ fi
 
-    execute make -j $MJOBS
-    execute make install
-    execute make install-lib-static
+    #~ execute make -j $MJOBS
+    #~ execute make install
+    #~ execute make install-lib-static
 
-    build_done "x264" $CURRENT_PACKAGE_VERSION
-  fi
-  CONFIGURE_OPTIONS+=("--enable-libx264")
-fi
+    #~ build_done "x264" $CURRENT_PACKAGE_VERSION
+  #~ fi
+  #~ CONFIGURE_OPTIONS+=("--enable-libx264")
+#~ fi
 
-if $NONFREE_AND_GPL; then
-  if build "x265" "3.6"; then
-    download "https://bitbucket.org/multicoreware/x265_git/downloads/x265_$CURRENT_PACKAGE_VERSION.tar.gz" "x265-$CURRENT_PACKAGE_VERSION.tar.gz" # This is actually 3.4 if looking at x265Version.txt
-    cd build/linux || exit
-    rm -rf 8bit 10bit 12bit 2>/dev/null
-    mkdir -p 8bit 10bit 12bit
-    cd 12bit || exit
-    execute cmake ../../../source -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=OFF -DBUILD_SHARED_LIBS=OFF -DHIGH_BIT_DEPTH=ON -DENABLE_HDR10_PLUS=ON -DEXPORT_C_API=OFF -DENABLE_CLI=OFF -DMAIN12=ON
-    execute make -j $MJOBS
-    cd ../10bit || exit
-    execute cmake ../../../source -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=OFF -DBUILD_SHARED_LIBS=OFF -DHIGH_BIT_DEPTH=ON -DENABLE_HDR10_PLUS=ON -DEXPORT_C_API=OFF -DENABLE_CLI=OFF
-    execute make -j $MJOBS
-    cd ../8bit || exit
-    ln -sf ../10bit/libx265.a libx265_main10.a
-    ln -sf ../12bit/libx265.a libx265_main12.a
-    execute cmake ../../../source -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=OFF -DBUILD_SHARED_LIBS=OFF -DEXTRA_LIB="x265_main10.a;x265_main12.a;-ldl" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON
-    execute make -j $MJOBS
+#~ if $NONFREE_AND_GPL; then
+  #~ if build "x265" "3.6"; then
+    #~ download "https://bitbucket.org/multicoreware/x265_git/downloads/x265_$CURRENT_PACKAGE_VERSION.tar.gz" "x265-$CURRENT_PACKAGE_VERSION.tar.gz" # This is actually 3.4 if looking at x265Version.txt
+    #~ cd build/linux || exit
+    #~ rm -rf 8bit 10bit 12bit 2>/dev/null
+    #~ mkdir -p 8bit 10bit 12bit
+    #~ cd 12bit || exit
+    #~ execute cmake ../../../source -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=OFF -DBUILD_SHARED_LIBS=OFF -DHIGH_BIT_DEPTH=ON -DENABLE_HDR10_PLUS=ON -DEXPORT_C_API=OFF -DENABLE_CLI=OFF -DMAIN12=ON
+    #~ execute make -j $MJOBS
+    #~ cd ../10bit || exit
+    #~ execute cmake ../../../source -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=OFF -DBUILD_SHARED_LIBS=OFF -DHIGH_BIT_DEPTH=ON -DENABLE_HDR10_PLUS=ON -DEXPORT_C_API=OFF -DENABLE_CLI=OFF
+    #~ execute make -j $MJOBS
+    #~ cd ../8bit || exit
+    #~ ln -sf ../10bit/libx265.a libx265_main10.a
+    #~ ln -sf ../12bit/libx265.a libx265_main12.a
+    #~ execute cmake ../../../source -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=OFF -DBUILD_SHARED_LIBS=OFF -DEXTRA_LIB="x265_main10.a;x265_main12.a;-ldl" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON
+    #~ execute make -j $MJOBS
 
-    mv libx265.a libx265_main.a
+    #~ mv libx265.a libx265_main.a
 
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-      execute "${MACOS_LIBTOOL}" -static -o libx265.a libx265_main.a libx265_main10.a libx265_main12.a 2>/dev/null
-    else
-      execute ar -M <<EOF
-CREATE libx265.a
-ADDLIB libx265_main.a
-ADDLIB libx265_main10.a
-ADDLIB libx265_main12.a
-SAVE
-END
-EOF
-    fi
+    #~ if [[ "$OSTYPE" == "darwin"* ]]; then
+      #~ execute "${MACOS_LIBTOOL}" -static -o libx265.a libx265_main.a libx265_main10.a libx265_main12.a 2>/dev/null
+    #~ else
+      #~ execute ar -M <<EOF
+#~ CREATE libx265.a
+#~ ADDLIB libx265_main.a
+#~ ADDLIB libx265_main10.a
+#~ ADDLIB libx265_main12.a
+#~ SAVE
+#~ END
+#~ EOF
+    #~ fi
 
-    execute make install
+    #~ execute make install
 
-    if [ -n "$LDEXEFLAGS" ]; then
-      sed -i.backup 's/-lgcc_s/-lgcc_eh/g' "${WORKSPACE}/lib/pkgconfig/x265.pc" # The -i.backup is intended and required on MacOS: https://stackoverflow.com/questions/5694228/sed-in-place-flag-that-works-both-on-mac-bsd-and-linux
-    fi
+    #~ if [ -n "$LDEXEFLAGS" ]; then
+      #~ sed -i.backup 's/-lgcc_s/-lgcc_eh/g' "${WORKSPACE}/lib/pkgconfig/x265.pc" # The -i.backup is intended and required on MacOS: https://stackoverflow.com/questions/5694228/sed-in-place-flag-that-works-both-on-mac-bsd-and-linux
+    #~ fi
 
-    build_done "x265" $CURRENT_PACKAGE_VERSION
-  fi
-  CONFIGURE_OPTIONS+=("--enable-libx265")
-fi
+    #~ build_done "x265" $CURRENT_PACKAGE_VERSION
+  #~ fi
+  #~ CONFIGURE_OPTIONS+=("--enable-libx265")
+#~ fi
 
 #~ if build "libvpx" "1.14.1"; then
   #~ download "https://github.com/webmproject/libvpx/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz" "libvpx-$CURRENT_PACKAGE_VERSION.tar.gz"
@@ -913,32 +913,32 @@ fi
   #~ build_done "libsdl" $CURRENT_PACKAGE_VERSION
 #~ fi
 
-if build "FreeType2" "2.13.2"; then
-  download "https://downloads.sourceforge.net/freetype/freetype-$CURRENT_PACKAGE_VERSION.tar.xz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
-  execute make -j $MJOBS
-  execute make install
-  build_done "FreeType2" $CURRENT_PACKAGE_VERSION
-fi
+#~ if build "FreeType2" "2.13.2"; then
+  #~ download "https://downloads.sourceforge.net/freetype/freetype-$CURRENT_PACKAGE_VERSION.tar.xz"
+  #~ execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  #~ execute make -j $MJOBS
+  #~ execute make install
+  #~ build_done "FreeType2" $CURRENT_PACKAGE_VERSION
+#~ fi
 
-CONFIGURE_OPTIONS+=("--enable-libfreetype")
+#~ CONFIGURE_OPTIONS+=("--enable-libfreetype")
 
-if $NONFREE_AND_GPL; then
-  if build "srt" "1.5.3"; then
-    download "https://github.com/Haivision/srt/archive/v$CURRENT_PACKAGE_VERSION.tar.gz" "srt-$CURRENT_PACKAGE_VERSION.tar.gz"
-    export OPENSSL_ROOT_DIR="${WORKSPACE}"
-    export OPENSSL_LIB_DIR="${WORKSPACE}"/lib
-    export OPENSSL_INCLUDE_DIR="${WORKSPACE}"/include/
-    execute cmake . -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DENABLE_APPS=OFF -DUSE_STATIC_LIBSTDCXX=ON
-    execute make install
+#~ if $NONFREE_AND_GPL; then
+  #~ if build "srt" "1.5.3"; then
+    #~ download "https://github.com/Haivision/srt/archive/v$CURRENT_PACKAGE_VERSION.tar.gz" "srt-$CURRENT_PACKAGE_VERSION.tar.gz"
+    #~ export OPENSSL_ROOT_DIR="${WORKSPACE}"
+    #~ export OPENSSL_LIB_DIR="${WORKSPACE}"/lib
+    #~ export OPENSSL_INCLUDE_DIR="${WORKSPACE}"/include/
+    #~ execute cmake . -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DENABLE_APPS=OFF -DUSE_STATIC_LIBSTDCXX=ON
+    #~ execute make install
 
-    if [ -n "$LDEXEFLAGS" ]; then
-      sed -i.backup 's/-lgcc_s/-lgcc_eh/g' "${WORKSPACE}"/lib/pkgconfig/srt.pc # The -i.backup is intended and required on MacOS: https://stackoverflow.com/questions/5694228/sed-in-place-flag-that-works-both-on-mac-bsd-and-linux
-    fi
+    #~ if [ -n "$LDEXEFLAGS" ]; then
+      #~ sed -i.backup 's/-lgcc_s/-lgcc_eh/g' "${WORKSPACE}"/lib/pkgconfig/srt.pc # The -i.backup is intended and required on MacOS: https://stackoverflow.com/questions/5694228/sed-in-place-flag-that-works-both-on-mac-bsd-and-linux
+    #~ fi
 
-    build_done "srt" $CURRENT_PACKAGE_VERSION
-  fi
-  CONFIGURE_OPTIONS+=("--enable-libsrt")
+    #~ build_done "srt" $CURRENT_PACKAGE_VERSION
+  #~ fi
+  #~ CONFIGURE_OPTIONS+=("--enable-libsrt")
 
   #~ if build "zvbi" "0.2.42"; then
     #~ download "https://github.com/zapping-vbi/zvbi/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz" "zvbi-$CURRENT_PACKAGE_VERSION.tar.gz"
@@ -949,7 +949,7 @@ if $NONFREE_AND_GPL; then
     #~ build_done "zvbi" $CURRENT_PACKAGE_VERSION
   #~ fi
   #~ CONFIGURE_OPTIONS+=("--enable-libzvbi")
-fi
+#~ fi
 
 ##
 ## zmq library
