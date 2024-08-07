@@ -257,7 +257,8 @@ while (($# > 0)); do
       LATEST=true
     fi
     if [[ "$1" == "--small" ]]; then
-      CONFIGURE_OPTIONS+=("--enable-small" "--disable-doc")
+      #~ CONFIGURE_OPTIONS+=("--enable-small" "--disable-doc")
+      CONFIGURE_OPTIONS+=("--enable-small" "--disable-doc" "--disable-network")
       MANPAGES=0
     fi
     shift
@@ -686,17 +687,17 @@ fi
 #~ fi
 #~ CONFIGURE_OPTIONS+=("--enable-libaom")
 
-if build "zimg" "3.0.5"; then
-  download "https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$CURRENT_PACKAGE_VERSION.tar.gz" "zimg-$CURRENT_PACKAGE_VERSION.tar.gz" "zimg"
-  cd zimg-release-$CURRENT_PACKAGE_VERSION || exit
-  execute "${WORKSPACE}/bin/libtoolize" -i -f -q
-  execute ./autogen.sh --prefix="${WORKSPACE}"
-  execute ./configure --prefix="${WORKSPACE}" --enable-static --disable-shared
-  execute make -j $MJOBS
-  execute make install
-  build_done "zimg" $CURRENT_PACKAGE_VERSION
-fi
-CONFIGURE_OPTIONS+=("--enable-libzimg")
+#~ if build "zimg" "3.0.5"; then
+  #~ download "https://github.com/sekrit-twc/zimg/archive/refs/tags/release-$CURRENT_PACKAGE_VERSION.tar.gz" "zimg-$CURRENT_PACKAGE_VERSION.tar.gz" "zimg"
+  #~ cd zimg-release-$CURRENT_PACKAGE_VERSION || exit
+  #~ execute "${WORKSPACE}/bin/libtoolize" -i -f -q
+  #~ execute ./autogen.sh --prefix="${WORKSPACE}"
+  #~ execute ./configure --prefix="${WORKSPACE}" --enable-static --disable-shared
+  #~ execute make -j $MJOBS
+  #~ execute make install
+  #~ build_done "zimg" $CURRENT_PACKAGE_VERSION
+#~ fi
+#~ CONFIGURE_OPTIONS+=("--enable-libzimg")
 
 ##
 ## audio library
@@ -781,15 +782,15 @@ CONFIGURE_OPTIONS+=("--enable-libzimg")
 #~ fi
 #~ CONFIGURE_OPTIONS+=("--enable-libmp3lame")
 
-if build "opus" "1.5.2"; then
-  download "https://downloads.xiph.org/releases/opus/opus-$CURRENT_PACKAGE_VERSION.tar.gz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
-  execute make -j $MJOBS
-  execute make install
+#~ if build "opus" "1.5.2"; then
+  #~ download "https://downloads.xiph.org/releases/opus/opus-$CURRENT_PACKAGE_VERSION.tar.gz"
+  #~ execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  #~ execute make -j $MJOBS
+  #~ execute make install
 
-  build_done "opus" $CURRENT_PACKAGE_VERSION
-fi
-CONFIGURE_OPTIONS+=("--enable-libopus")
+  #~ build_done "opus" $CURRENT_PACKAGE_VERSION
+#~ fi
+#~ CONFIGURE_OPTIONS+=("--enable-libopus")
 
 if build "libogg" "1.3.5"; then
   download "https://ftp.osuosl.org/pub/xiph/releases/ogg/libogg-$CURRENT_PACKAGE_VERSION.tar.xz"
@@ -868,36 +869,36 @@ if build "libpng" "1.6.43"; then
   build_done "libpng" $CURRENT_PACKAGE_VERSION
 fi
 
-if build "libjxl" "0.10.3"; then
-  download "https://github.com/libjxl/libjxl/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz" "libjxl-$CURRENT_PACKAGE_VERSION.tar.gz"
-# currently needed to fix linking of static builds in non-C++ applications
-  sed "s/-ljxl_threads/-ljxl_threads @JPEGXL_THREADS_PUBLIC_LIBS@/g" lib/threads/libjxl_threads.pc.in >lib/threads/libjxl_threads.pc.in.patched
-  rm lib/threads/libjxl_threads.pc.in
-  mv lib/threads/libjxl_threads.pc.in.patched lib/threads/libjxl_threads.pc.in
-  sed 's/set(JPEGXL_REQUIRES_TYPE "Requires")/set(JPEGXL_REQUIRES_TYPE "Requires")\'$'\n''  set(JPEGXL_THREADS_PUBLIC_LIBS "-lm ${PKGCONFIG_CXX_LIB}")/g' lib/jxl_threads.cmake >lib/jxl_threads.cmake.patched
-  rm lib/jxl_threads.cmake
-  mv lib/jxl_threads.cmake.patched lib/jxl_threads.cmake
-  execute ./deps.sh
-  execute cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=off -DENABLE_STATIC=ON -DCMAKE_BUILD_TYPE=Release -DJPEGXL_ENABLE_BENCHMARK=OFF -DJPEGXL_ENABLE_DOXYGEN=OFF -DJPEGXL_ENABLE_MANPAGES=OFF -DJPEGXL_ENABLE_JPEGLI_LIBJPEG=OFF -DJPEGXL_ENABLE_JPEGLI=OFF -DJPEGXL_TEST_TOOLS=OFF -DJPEGXL_ENABLE_JNI=OFF -DBUILD_TESTING=OFF .
-  execute make -j $MJOBS
-  execute make install
-  build_done "libjxl" $CURRENT_PACKAGE_VERSION
-fi
-CONFIGURE_OPTIONS+=("--enable-libjxl")
+#~ if build "libjxl" "0.10.3"; then
+  #~ download "https://github.com/libjxl/libjxl/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz" "libjxl-$CURRENT_PACKAGE_VERSION.tar.gz"
+#~ # currently needed to fix linking of static builds in non-C++ applications
+  #~ sed "s/-ljxl_threads/-ljxl_threads @JPEGXL_THREADS_PUBLIC_LIBS@/g" lib/threads/libjxl_threads.pc.in >lib/threads/libjxl_threads.pc.in.patched
+  #~ rm lib/threads/libjxl_threads.pc.in
+  #~ mv lib/threads/libjxl_threads.pc.in.patched lib/threads/libjxl_threads.pc.in
+  #~ sed 's/set(JPEGXL_REQUIRES_TYPE "Requires")/set(JPEGXL_REQUIRES_TYPE "Requires")\'$'\n''  set(JPEGXL_THREADS_PUBLIC_LIBS "-lm ${PKGCONFIG_CXX_LIB}")/g' lib/jxl_threads.cmake >lib/jxl_threads.cmake.patched
+  #~ rm lib/jxl_threads.cmake
+  #~ mv lib/jxl_threads.cmake.patched lib/jxl_threads.cmake
+  #~ execute ./deps.sh
+  #~ execute cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=off -DENABLE_STATIC=ON -DCMAKE_BUILD_TYPE=Release -DJPEGXL_ENABLE_BENCHMARK=OFF -DJPEGXL_ENABLE_DOXYGEN=OFF -DJPEGXL_ENABLE_MANPAGES=OFF -DJPEGXL_ENABLE_JPEGLI_LIBJPEG=OFF -DJPEGXL_ENABLE_JPEGLI=OFF -DJPEGXL_TEST_TOOLS=OFF -DJPEGXL_ENABLE_JNI=OFF -DBUILD_TESTING=OFF .
+  #~ execute make -j $MJOBS
+  #~ execute make install
+  #~ build_done "libjxl" $CURRENT_PACKAGE_VERSION
+#~ fi
+#~ CONFIGURE_OPTIONS+=("--enable-libjxl")
 
-if build "libwebp" "1.4.0"; then
-  # libwebp can fail to compile on Ubuntu if these flags were left set to CFLAGS
-  CPPFLAGS=
-  download "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-$CURRENT_PACKAGE_VERSION.tar.gz" "libwebp-$CURRENT_PACKAGE_VERSION.tar.gz"
-  make_dir build
-  cd build || exit
-  execute cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF ../
-  execute make -j $MJOBS
-  execute make install
+#~ if build "libwebp" "1.4.0"; then
+  #~ # libwebp can fail to compile on Ubuntu if these flags were left set to CFLAGS
+  #~ CPPFLAGS=
+  #~ download "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-$CURRENT_PACKAGE_VERSION.tar.gz" "libwebp-$CURRENT_PACKAGE_VERSION.tar.gz"
+  #~ make_dir build
+  #~ cd build || exit
+  #~ execute cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF ../
+  #~ execute make -j $MJOBS
+  #~ execute make install
 
-  build_done "libwebp" $CURRENT_PACKAGE_VERSION
-fi
-CONFIGURE_OPTIONS+=("--enable-libwebp")
+  #~ build_done "libwebp" $CURRENT_PACKAGE_VERSION
+#~ fi
+#~ CONFIGURE_OPTIONS+=("--enable-libwebp")
 
 ##
 ## other library
@@ -939,15 +940,15 @@ if $NONFREE_AND_GPL; then
   fi
   CONFIGURE_OPTIONS+=("--enable-libsrt")
 
-  if build "zvbi" "0.2.42"; then
-    download "https://github.com/zapping-vbi/zvbi/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz" "zvbi-$CURRENT_PACKAGE_VERSION.tar.gz"
-    execute ./autogen.sh --prefix="${WORKSPACE}"
-    execute ./configure CFLAGS="-I${WORKSPACE}/include/libpng16 ${CFLAGS}" --prefix="${WORKSPACE}" --enable-static --disable-shared
-    execute make -j $MJOBS
-    execute make install
-    build_done "zvbi" $CURRENT_PACKAGE_VERSION
-  fi
-  CONFIGURE_OPTIONS+=("--enable-libzvbi")
+  #~ if build "zvbi" "0.2.42"; then
+    #~ download "https://github.com/zapping-vbi/zvbi/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz" "zvbi-$CURRENT_PACKAGE_VERSION.tar.gz"
+    #~ execute ./autogen.sh --prefix="${WORKSPACE}"
+    #~ execute ./configure CFLAGS="-I${WORKSPACE}/include/libpng16 ${CFLAGS}" --prefix="${WORKSPACE}" --enable-static --disable-shared
+    #~ execute make -j $MJOBS
+    #~ execute make install
+    #~ build_done "zvbi" $CURRENT_PACKAGE_VERSION
+  #~ fi
+  #~ CONFIGURE_OPTIONS+=("--enable-libzvbi")
 fi
 
 ##
