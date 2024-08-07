@@ -549,7 +549,7 @@ fi
   #~ fi
 #~ fi
 
-if $NONFREE_AND_GPL; then
+#if $NONFREE_AND_GPL; then
 
   #~ if build "x264" "be4f0200"; then
     #~ download "https://code.videolan.org/videolan/x264/-/archive/$CURRENT_PACKAGE_VERSION/x264-$CURRENT_PACKAGE_VERSION.tar.gz" "x264-$CURRENT_PACKAGE_VERSION.tar.gz"
@@ -1002,7 +1002,7 @@ fi
 
   #~ # Vaapi doesn't work well with static links FFmpeg.
   #~ if [ -z "$LDEXEFLAGS" ]; then
-    #~ # If the libva development SDK is installed, enable vaapi.
+   #~ # If the libva development SDK is installed, enable vaapi.
     #~ if library_exists "libva"; then
       #~ if build "vaapi" "1"; then
         #~ build_done "vaapi" "1"
